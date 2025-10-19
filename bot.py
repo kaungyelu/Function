@@ -310,63 +310,64 @@ async def handle_message(update: Update, context: ContextTypes.DEFAULT_TYPE):
             if not line:
                 continue
 
-   # Add this new condition for "ကပ်" formula with reverse support
-            if 'ကို' in line and 'ကပ်' in line:
-                try:
-                    # Check if reverse is needed
-                    has_reverse = 'r' in line.lower()
+ # Add this new condition for "ကပ်" formula with reverse support
+if 'ကို' in line and 'ကပ်' in line:
+    try:
+        # Check if reverse is needed
+        has_reverse = 'r' in line.lower()
+        
+        # Extract numbers before and after "ကို"
+        parts = line.split('ကို')
+        if len(parts) == 2:
+            before_ko = parts[0].strip()
+            after_ko = parts[1].strip()
+            
+            # Extract numbers from both parts
+            nums_before = re.findall(r'\d', before_ko)
+            nums_after = re.findall(r'\d', after_ko)
+            
+            # Extract amount from "ကပ်" part
+            amount_match = re.search(r'ကပ်\s*r?\s*(\d+)', after_ko, re.IGNORECASE)
+            if amount_match:
+                amount = int(amount_match.group(1))
+                
+                if amount >= 100 and nums_before and nums_after:
+                    # Create all combinations
+                    combinations = []
+                    for num1 in nums_before:
+                        for num2 in nums_after:
+                            combined_num = int(num1 + num2)
+                            if combined_num not in combinations:
+                                combinations.append(combined_num)
                     
-                    # Extract numbers before and after "ကို"
-                    parts = line.split('ကို')
-                    if len(parts) == 2:
-                        before_ko = parts[0].strip()
-                        after_ko = parts[1].strip()
+                    # Add bets for all combinations
+                    for num in combinations:
+                        if num in closed_numbers:
+                            blocked_bets.append(f"{num:02d}-{amount}")
+                        else:
+                            all_bets.append(f"{num:02d}-{amount}")
+                            total_amount += amount
+                    
+                    # Add reverse numbers if 'r' is present
+                    if has_reverse:
+                        reverse_combinations = []
+                        for num in combinations:
+                            rev_num = reverse_number(num)
+                            if rev_num not in combinations and rev_num not in reverse_combinations:
+                                reverse_combinations.append(rev_num)
                         
-                        # Extract numbers from both parts
-                        nums_before = re.findall(r'\d', before_ko)
-                        nums_after = re.findall(r'\d', after_ko)
-                        
-                        # Extract amount from "ကပ်" part
-                        amount_match = re.search(r'ကပ်\s*r?\s*(\d+)', after_ko, re.IGNORECASE)
-                        if amount_match:
-                            amount = int(amount_match.group(1))
-                            
-                            if amount >= 100 and nums_before and nums_after:
-                                # Create all combinations
-                                combinations = []
-                                for num1 in nums_before:
-                                    for num2 in nums_after:
-                                        combined_num = int(num1 + num2)
-                                        if combined_num not in combinations:
-                                            combinations.append(combined_num)
-                                
-                                # Add bets for all combinations
-                                for num in combinations:
-                                    if num in closed_numbers:
-                                        blocked_bets.append(f"{num:02d}-{amount}")
-                                    else:
-                                        all_bets.append(f"{num:02d}-{amount}")
-                                        total_amount += amount
-                                
-                                # Add reverse numbers if 'r' is present
-                                if has_reverse:
-                                    reverse_combinations = []
-                                    for num in combinations:
-                                        rev_num = reverse_number(num)
-                                        if rev_num not in combinations and rev_num not in reverse_combinations:
-                                            reverse_combinations.append(rev_num)
-                                    
-                                    for rev_num in reverse_combinations:
-                                        if rev_num in closed_numbers:
-                                            blocked_bets.append(f"{rev_num:02d}-{amount}")
-                                        else:
-                                            all_bets.append(f"{rev_num:02d}-{amount}")
-                                            total_amount += amount
-                                
-                                continue
-                except Exception as e:
-                    logger.error(f"Error processing 'coup' formula: {str(e)}")
-
+                        for rev_num in reverse_combinations:
+                            if rev_num in closed_numbers:
+                                blocked_bets.append(f"{rev_num:02d}-{amount}")
+                            else:
+                                all_bets.append(f"{rev_num:02d}-{amount}")
+                                total_amount += amount
+                    
+                    continue
+    except Exception as e:
+        logger.error(f"Error processing 'coup' formula: {str(e)}")
+        # Continue to other processing methods
+    
 
 
             
