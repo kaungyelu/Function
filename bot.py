@@ -308,8 +308,7 @@ async def handle_message(update: Update, context: ContextTypes.DEFAULT_TYPE):
             line = line.strip()
             if not line:
                 continue
-
-  # 
+# handle_message function ထဲမှာ ဒီ code ကို အစားထိုးပါ
 if 'ကို' in line and 'ကပ်' in line:
     try:
         # Check if reverse is needed
@@ -368,8 +367,7 @@ if 'ကို' in line and 'ကပ်' in line:
     except Exception as e:
         logger.error(f"Error processing 'coup' formula: {str(e)}")
         # Continue to other processing methods
-   
-            
+
             # Check for wheel cases
             if 'ခွေ' in line or 'ခွေပူး' in line:
                 if 'ခွေ' in line:
