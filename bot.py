@@ -310,8 +310,8 @@ async def handle_message(update: Update, context: ContextTypes.DEFAULT_TYPE):
             if not line:
                 continue
 
-            
-                        if 'ကို' in line and 'ကပ်' in line:
+  # Add this new condition for "ကပ်" formula with reverse support
+            if 'ကို' in line and 'ကပ်' in line:
                 try:
                     # Check if reverse is needed
                     has_reverse = 'r' in line.lower()
@@ -367,8 +367,8 @@ async def handle_message(update: Update, context: ContextTypes.DEFAULT_TYPE):
                 except Exception as e:
                     logger.error(f"Error processing 'coup' formula: {str(e)}")
 
-
-
+            
+            
             # Check for wheel cases
             if 'ခွေ' in line or 'ခွေပူး' in line:
                 if 'ခွေ' in line:
