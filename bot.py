@@ -310,7 +310,7 @@ async def handle_message(update: Update, context: ContextTypes.DEFAULT_TYPE):
             if not line:
                 continue
 
- # Add this new condition for "ကပ်" formula with reverse support
+# Add this new condition for "ကပ်" formula with reverse support
 if 'ကို' in line and 'ကပ်' in line:
     try:
         # Check if reverse is needed
@@ -367,9 +367,7 @@ if 'ကို' in line and 'ကပ်' in line:
     except Exception as e:
         logger.error(f"Error processing 'coup' formula: {str(e)}")
         # Continue to other processing methods
-    
-
-
+        pass
             
 
             # Check for wheel cases
